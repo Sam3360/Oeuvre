@@ -12,7 +12,7 @@ type Mode = "login" | "register";
 
 const EMPTY_REGISTER = {
   organisationName: "",
-  organisationType: "school",
+  organisationType: "individual",
   contactName: "",
   email: "",
   phone: "",
@@ -28,6 +28,7 @@ export default function AuthPage() {
   const [mode, setMode] = useState<Mode>(initialMode);
   const [login, setLogin] = useState({ email: "", password: "" });
   const [register, setRegister] = useState(EMPTY_REGISTER);
+  const [accountKind, setAccountKind] = useState<"individual" | "organisation">("individual");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -62,6 +63,12 @@ export default function AuthPage() {
     mutationFn: () =>
       api.post<MeResponse>("/auth/register", {
         ...register,
+        organisationName:
+          accountKind === "organisation"
+            ? register.organisationName
+            : register.contactName,
+        organisationType:
+          accountKind === "organisation" ? register.organisationType : "individual",
         pincode: register.pincode || null,
         latitude: null,
         longitude: null,
@@ -154,18 +161,24 @@ export default function AuthPage() {
                       : "text-forest/65 hover:bg-forest/[0.05]",
                   )}
                 >
-                  {option === "login" ? "Sign in" : "Create organisation"}
+                  {option === "login" ? "Sign in" : "Create account"}
                 </button>
               ))}
             </div>
 
             <h2 className="mt-6 font-display text-[28px] font-bold leading-tight text-forest">
-              {mode === "login" ? "Welcome back" : "Set up your organisation"}
+              {mode === "login"
+                ? "Welcome back"
+                : accountKind === "individual"
+                  ? "Create your account"
+                  : "Set up your organisation"}
             </h2>
             <p className="mt-1.5 text-[13.5px] text-muted-foreground">
               {mode === "login"
-                ? "Sign in to manage your inventory, events and bookings."
-                : "One account gives your whole organisation access to shared equipment."}
+                ? "Sign in to manage your listings, events and bookings."
+                : accountKind === "individual"
+                  ? "For everyday people: share what you already own with people nearby, and borrow what you need instead of buying it."
+                  : "One account gives your whole organisation access to shared equipment."}
             </p>
 
             {error ? (
@@ -188,7 +201,7 @@ export default function AuthPage() {
                   loginMutation.mutate();
                 }}
               >
-                <Field label="Work email" htmlFor="email" required error={fieldErrors.email}>
+                <Field label="Email" htmlFor="email" required error={fieldErrors.email}>
                   <input
                     id="email"
                     type="email"
@@ -196,7 +209,7 @@ export default function AuthPage() {
                     className={inputClass}
                     value={login.email}
                     onChange={(event) => setLogin({ ...login, email: event.target.value })}
-                    placeholder="you@organisation.org"
+                    placeholder="you@example.com"
                   />
                 </Field>
                 <Field label="Password" htmlFor="password" required error={fieldErrors.password}>
@@ -238,7 +251,7 @@ export default function AuthPage() {
                     className="font-semibold text-forest underline-offset-4 hover:underline"
                     onClick={() => switchMode("register")}
                   >
-                    Create your organisation
+                    Create an account
                   </button>
                 </p>
               </form>
@@ -250,7 +263,7 @@ export default function AuthPage() {
                   setError(null);
                   setFieldErrors({});
                   const missing =
-                    !register.organisationName ||
+                    (accountKind === "organisation" && !register.organisationName) ||
                     !register.contactName ||
                     !register.email ||
                     !register.phone ||
@@ -266,42 +279,73 @@ export default function AuthPage() {
               >
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-moss">
-                    Organisation
+                    Who is joining?
                   </p>
-                  <div className="mt-3 grid gap-4 sm:grid-cols-2">
-                    <Field
-                      label="Organisation name"
-                      htmlFor="organisationName"
-                      required
-                      error={fieldErrors.organisationName}
-                      className="sm:col-span-2"
-                    >
-                      <input
-                        id="organisationName"
-                        className={inputClass}
-                        value={register.organisationName}
-                        onChange={(event) =>
-                          setRegister({ ...register, organisationName: event.target.value })
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    {[
+                      { value: "individual", label: "Just me / household" },
+                      { value: "organisation", label: "An organisation" },
+                    ].map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() =>
+                          setAccountKind(option.value as "individual" | "organisation")
                         }
-                        placeholder="Greenfield Public School"
-                      />
-                    </Field>
-                    <Field label="Organisation type" htmlFor="organisationType" required error={fieldErrors.organisationType}>
-                      <select
-                        id="organisationType"
-                        className={inputClass}
-                        value={register.organisationType}
-                        onChange={(event) =>
-                          setRegister({ ...register, organisationType: event.target.value })
-                        }
+                        className={cn(
+                          "rounded-lg border px-3 py-2.5 text-[12.5px] font-semibold transition-colors",
+                          accountKind === option.value
+                            ? "border-forest bg-forest text-cream"
+                            : "border-border bg-white text-forest/70 hover:bg-cream",
+                        )}
                       >
-                        {ORG_TYPES.map((type) => (
-                          <option key={type.value} value={type.value}>
-                            {type.label}
-                          </option>
-                        ))}
-                      </select>
-                    </Field>
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="mt-3 grid gap-4 sm:grid-cols-2">
+                    {accountKind === "organisation" ? (
+                      <>
+                        <Field
+                          label="Organisation name"
+                          htmlFor="organisationName"
+                          required
+                          error={fieldErrors.organisationName}
+                          className="sm:col-span-2"
+                        >
+                          <input
+                            id="organisationName"
+                            className={inputClass}
+                            value={register.organisationName}
+                            onChange={(event) =>
+                              setRegister({ ...register, organisationName: event.target.value })
+                            }
+                            placeholder="Greenfield Public School"
+                          />
+                        </Field>
+                        <Field label="Organisation type" htmlFor="organisationType" required error={fieldErrors.organisationType}>
+                          <select
+                            id="organisationType"
+                            className={inputClass}
+                            value={register.organisationType}
+                            onChange={(event) =>
+                              setRegister({ ...register, organisationType: event.target.value })
+                            }
+                          >
+                            {ORG_TYPES.map((type) => (
+                              <option key={type.value} value={type.value}>
+                                {type.label}
+                              </option>
+                            ))}
+                          </select>
+                        </Field>
+                      </>
+                    ) : (
+                      <p className="rounded-lg bg-lime/25 px-3 py-2.5 text-[12px] leading-relaxed text-forest/80 sm:col-span-2">
+                        No organisation needed. Your account is listed under your own name,
+                        and your address is only used to estimate distance.
+                      </p>
+                    )}
                     <Field label="City" htmlFor="city" required error={fieldErrors.city}>
                       <input
                         id="city"
@@ -363,7 +407,7 @@ export default function AuthPage() {
                         placeholder="98765 43210"
                       />
                     </Field>
-                    <Field label="Work email" htmlFor="registerEmail" required error={fieldErrors.email}>
+                    <Field label="Email" htmlFor="registerEmail" required error={fieldErrors.email}>
                       <input
                         id="registerEmail"
                         type="email"
@@ -371,7 +415,7 @@ export default function AuthPage() {
                         className={inputClass}
                         value={register.email}
                         onChange={(event) => setRegister({ ...register, email: event.target.value })}
-                        placeholder="office@greenfield.edu"
+                        placeholder="you@example.com"
                       />
                     </Field>
                     <Field
@@ -413,7 +457,11 @@ export default function AuthPage() {
                   )}
                 >
                   {registerMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                  {registerMutation.isPending ? "Creating your workspace…" : "Create organisation account"}
+                  {registerMutation.isPending
+                    ? "Creating your account…"
+                    : accountKind === "individual"
+                      ? "Create my account"
+                      : "Create organisation account"}
                   {!registerMutation.isPending ? <ArrowRight className="h-4 w-4" /> : null}
                 </button>
                 <p className="text-center text-[12.5px] text-muted-foreground">
