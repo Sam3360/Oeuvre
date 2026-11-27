@@ -30,7 +30,7 @@ const NAV = [
   { href: "/events", label: "Events", icon: CalendarDays },
   { href: "/bookings", label: "Bookings", icon: Handshake },
   { href: "/impact", label: "Impact", icon: BarChart3 },
-  { href: "/organisation", label: "Organisation", icon: Building2 },
+  { href: "/organisation", label: "Profile", icon: Building2 },
 ];
 
 const MOBILE_NAV = [NAV[0], NAV[1], NAV[2], NAV[3], NAV[4]];
