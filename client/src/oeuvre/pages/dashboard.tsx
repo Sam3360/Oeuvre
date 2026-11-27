@@ -289,7 +289,8 @@ export default function DashboardPage() {
             </span>
             <p className="mt-4 font-display text-2xl font-bold">{formatNumber(stats.completedShares)}</p>
             <p className="mt-1 text-[12px] text-cream/65">
-              completed handovers recorded by your organisation.
+              completed handovers recorded by your organisation — each one keeps equipment
+              in use instead of newly bought.
             </p>
             <Link href="/impact">
               <span className="mt-4 inline-flex cursor-pointer items-center gap-1 text-[12px] font-semibold text-lime hover:underline">
