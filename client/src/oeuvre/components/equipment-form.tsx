@@ -133,8 +133,9 @@ export function EquipmentFormDialog({
             {item ? "Edit listing" : "Add equipment"}
           </DialogTitle>
           <DialogDescription>
-            Only list items you can genuinely lend. Availability and quantity are checked
-            against every booking.
+            Only list items you can genuinely lend. Unused equipment you list becomes a
+            reuse option for nearby organisations, and availability is checked against
+            every booking.
           </DialogDescription>
         </DialogHeader>
 
