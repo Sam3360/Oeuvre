@@ -1,5 +1,5 @@
 import { QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { Redirect, Route, Switch } from "wouter";
+import { Route, Switch } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { queryClient } from "./lib/queryClient";
@@ -71,9 +71,10 @@ function SignedOutRoutes() {
       <Route path="/login" component={AuthPage} />
       <Route path="/signup" component={AuthPage} />
       <Route path="/" component={LandingPage} />
-      <Route>
-        <Redirect to="/" />
-      </Route>
+      {/* Any other path shows the sign-in page. Redirecting to "/" here used
+          to fire while a fresh login was still propagating, which pushed the
+          just-navigated workspace URL back to the landing page. */}
+      <Route component={AuthPage} />
     </Switch>
   );
 }
