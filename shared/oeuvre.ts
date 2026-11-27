@@ -7,6 +7,7 @@
  */
 
 export const ORG_TYPES = [
+  { value: "individual", label: "Individual / household" },
   { value: "school", label: "School" },
   { value: "society", label: "Housing society" },
   { value: "ngo", label: "NGO" },
