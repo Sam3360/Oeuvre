@@ -19,9 +19,13 @@ const isLocal = /(^|@)(localhost|127\.0\.0\.1|::1)(:|\/)/.test(connectionString)
 export const pool = new Pool({
   connectionString,
   ssl: isLocal ? false : { rejectUnauthorized: false },
-  max: 10,
+  // Serverless instances are short-lived and many can run at once, so keep
+  // each instance's pool small when running on Vercel.
+  max: process.env.VERCEL ? 3 : 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
+  keepAlive: true,
+  application_name: "oeuvre",
 });
 
 pool.on('error', (err: Error) => {
@@ -36,6 +40,7 @@ export async function pingDatabase(): Promise<boolean> {
     await pool.query('SELECT 1');
     return true;
   } catch (error) {
+    // Never log the connection string; the driver message is enough.
     console.error('Database ping failed:', (error as Error).message);
     return false;
   }

@@ -5,10 +5,14 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx watch server/index.ts",
-    "build": "vite build && esbuild server/index.ts --platform=node --bundle --format=esm --outfile=dist/server.js --alias:@shared=./shared --packages=external",
+    "build": "npm run build:client && npm run build:server && npm run build:api",
     "start": "NODE_ENV=production node dist/server.js",
     "check": "tsc",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "build:client": "vite build",
+    "build:server": "esbuild server/index.ts --platform=node --bundle --format=esm --outfile=dist/server.js --alias:@shared=./shared --packages=external",
+    "build:api": "esbuild server/app.ts --platform=node --bundle --format=cjs --outfile=dist/api.cjs --alias:@shared=./shared --external:pg-native",
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.7",

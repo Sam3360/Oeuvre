@@ -3,7 +3,8 @@
   "outputDirectory": "dist/public",
   "functions": {
     "api/index.js": {
-      "includeFiles": "dist/server.js"
+      "includeFiles": "dist/api.cjs",
+      "maxDuration": 30
     }
   },
   "rewrites": [

@@ -9,6 +9,8 @@
     "shared/**/*",
     "server/oeuvre/**/*",
     "server/index.ts",
+    "server/app.ts",
+    "server/schema.ts",
     "server/db.ts",
     "server/auth-utils.ts",
     "server/static.ts",
