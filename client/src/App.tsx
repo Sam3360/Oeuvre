@@ -67,6 +67,7 @@ function useSessionQuery() {
 function SignedOutRoutes() {
   return (
     <Switch>
+      <Route path="/auth" component={AuthPage} />
       <Route path="/login" component={AuthPage} />
       <Route path="/signup" component={AuthPage} />
       <Route path="/" component={LandingPage} />
