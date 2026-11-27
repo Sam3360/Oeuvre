@@ -15,7 +15,7 @@ export default function OnboardingPage() {
   const [, navigate] = useLocation();
   const [form, setForm] = useState({
     organisationName: "",
-    organisationType: "school",
+    organisationType: "individual",
     city: "",
     address: "",
     pincode: "",
@@ -35,7 +35,7 @@ export default function OnboardingPage() {
         setError(err.message);
         setFieldErrors(err.fieldErrors);
       } else {
-        setError("Could not create your organisation. Please try again.");
+        setError("Could not create your profile. Please try again.");
       }
     },
   });
@@ -52,11 +52,12 @@ export default function OnboardingPage() {
             <Building2 className="h-5 w-5" />
           </span>
           <h1 className="mt-4 font-display text-[26px] font-bold text-forest">
-            Add your organisation
+            Finish setting up your account
           </h1>
           <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
-            Your account ({user.email}) is not linked to an organisation yet. Add these
-            details once to start listing equipment and planning events.
+            Your account ({user.email}) is not linked to a profile yet. Add these details
+            once to start listing equipment and planning events — as an individual or an
+            organisation.
           </p>
 
           {error ? (
@@ -72,13 +73,19 @@ export default function OnboardingPage() {
               setError(null);
               setFieldErrors({});
               if (!form.organisationName || !form.city || !form.address || !form.phone) {
-                setError("Organisation name, city, address and phone are required.");
+                setError("Display name, city, address and phone are required.");
                 return;
               }
               mutation.mutate();
             }}
           >
-            <Field label="Organisation name" htmlFor="orgName" required error={fieldErrors.organisationName}>
+            <Field
+              label="Display name"
+              htmlFor="orgName"
+              required
+              error={fieldErrors.organisationName}
+              hint="Your own name, household name or organisation name."
+            >
               <input
                 id="orgName"
                 className={inputClass}
@@ -88,7 +95,7 @@ export default function OnboardingPage() {
               />
             </Field>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Organisation type" htmlFor="orgType" required error={fieldErrors.organisationType}>
+              <Field label="Profile type" htmlFor="orgType" required error={fieldErrors.organisationType}>
                 <select
                   id="orgType"
                   className={inputClass}
@@ -151,7 +158,7 @@ export default function OnboardingPage() {
               )}
             >
               {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-              {mutation.isPending ? "Creating workspace…" : "Continue to dashboard"}
+              {mutation.isPending ? "Saving…" : "Continue to dashboard"}
               {!mutation.isPending ? <ArrowRight className="h-4 w-4" /> : null}
             </button>
           </form>
