@@ -1,5 +1,5 @@
 import { QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { Route, Switch } from "wouter";
+import { Redirect, Route, Switch } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { queryClient } from "./lib/queryClient";
@@ -83,6 +83,11 @@ function WorkspaceRoutes() {
   return (
     <AppShell>
       <Switch>
+        {/* A signed-in visitor opening the site root should land in their
+            workspace, not on the not-found card. */}
+        <Route path="/">
+          <Redirect to="/dashboard" />
+        </Route>
         <Route path="/dashboard" component={DashboardPage} />
         <Route path="/inventory" component={InventoryPage} />
         <Route path="/equipment/:id" component={EquipmentDetailPage} />
