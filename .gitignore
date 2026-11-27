@@ -1,0 +1,13 @@
+node_modules/
+dist/
+/scratch/
+/.vercel/
+/build
+*.log
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+.env
+.env.*
+!.env.example
