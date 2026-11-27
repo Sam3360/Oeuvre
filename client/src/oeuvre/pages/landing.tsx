@@ -27,7 +27,7 @@ const STEPS = [
   },
   {
     title: "See what is nearby",
-    body: "Nearby schools, societies, NGOs and clubs list the chairs, speakers and stages they already own and are willing to lend.",
+    body: "Nearby schools, societies, NGOs, clubs and households list the chairs, speakers and stages they already own and are willing to lend.",
     icon: Search,
   },
   {
@@ -139,7 +139,7 @@ export default function LandingPage() {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link href="/auth?mode=register">
                 <span className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-lime px-5 py-3 text-sm font-semibold text-forest transition-transform hover:-translate-y-0.5">
-                  Create your organisation
+                  Create your account
                   <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
@@ -151,7 +151,7 @@ export default function LandingPage() {
               </a>
             </div>
             <p className="mt-5 text-[12px] text-cream/45">
-              Built for schools, housing societies, NGOs and clubs.
+              Built for schools, societies, NGOs and clubs — and everyday people.
             </p>
           </div>
 
@@ -426,7 +426,7 @@ export default function LandingPage() {
             {[
               { label: "Completed shares", value: actual?.completedShares },
               { label: "Units reused", value: actual?.unitsReused },
-              { label: "Organisations sharing", value: actual?.participatingOrganisations },
+              { label: "People and organisations sharing", value: actual?.participatingOrganisations },
               { label: "Active listings", value: actual?.activeListings },
             ].map((stat) => (
               <div key={stat.label} className="rounded-2xl border border-border bg-[#FAFAF6] p-5">
@@ -440,8 +440,8 @@ export default function LandingPage() {
 
           {!actual?.completedShares ? (
             <p className="mt-5 text-[12px] text-muted-foreground">
-              The platform is new — live figures will grow as organisations complete
-              their first handovers.
+              The platform is new — live figures will grow as people and organisations
+              complete their first handovers.
             </p>
           ) : null}
         </div>
@@ -458,7 +458,8 @@ export default function LandingPage() {
               </h2>
               <p className="mt-3 text-[14px] leading-relaxed text-cream/65">
                 Add what you own, plan what you need, and let Oeuvre find the shortest
-                path between the two.
+                path between the two. Individuals, households and organisations are all
+                welcome — no organisation required.
               </p>
             </div>
             <Link href="/auth?mode=register">
