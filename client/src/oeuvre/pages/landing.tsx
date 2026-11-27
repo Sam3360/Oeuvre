@@ -5,11 +5,14 @@ import {
   Boxes,
   CalendarCheck,
   CheckCircle2,
+  Factory,
   Handshake,
   MapPin,
+  Recycle,
   Ruler,
   Search,
   Sparkles,
+  Trash2,
   Wallet,
 } from "lucide-react";
 import { api, type ImpactResponse } from "../api";
@@ -36,6 +39,24 @@ const STEPS = [
     title: "Return and record",
     body: "Pick up, return, confirm. Booking history keeps stock accurate and feeds your shared impact record.",
     icon: Boxes,
+  },
+];
+
+const REUSE_POINTS = [
+  {
+    title: "Existing stock does more work",
+    body: "Chairs, stages and projectors that already exist get used again and again, instead of sitting in a store room between events.",
+    icon: Recycle,
+  },
+  {
+    title: "Fewer new products needed",
+    body: "Each requirement a nearby lender can cover is a purchase that can be deferred or dropped — and manufacturing is where most of a product's environmental cost is locked in.",
+    icon: Factory,
+  },
+  {
+    title: "Less waste after the event",
+    body: "Borrowed equipment goes back to its owner and can be lent again, rather than being stored, forgotten or thrown away.",
+    icon: Trash2,
   },
 ];
 
@@ -68,6 +89,7 @@ export default function LandingPage() {
           <nav className="hidden items-center gap-7 text-[13px] font-medium text-forest/70 md:flex">
             <a href="#how" className="transition-colors hover:text-forest">How it works</a>
             <a href="#matching" className="transition-colors hover:text-forest">Matching</a>
+            <a href="#reuse" className="transition-colors hover:text-forest">Why reuse</a>
             <a href="#impact" className="transition-colors hover:text-forest">Impact</a>
           </nav>
           <div className="flex items-center gap-2">
@@ -111,7 +133,8 @@ export default function LandingPage() {
             <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-cream/70">
               Oeuvre matches the equipment your event needs with the chairs, tables,
               projectors and stages already sitting in nearby organisations — so you
-              borrow for a day instead of buying for a lifetime.
+              borrow for a day instead of buying for a lifetime. Every listing reused is
+              one less item manufactured, shipped and eventually thrown away.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link href="/auth?mode=register">
@@ -202,7 +225,9 @@ export default function LandingPage() {
             A school buys 300 chairs for one annual day. A society buys a projector for
             monthly meetings. An NGO buys a canopy for one drive a year. The equipment
             works for a day and then waits in a store room — while the organisation
-            across the road rents exactly the same thing.
+            across the road rents exactly the same thing. The cost is not only money:
+            every unnecessary purchase carries the materials and energy used to make it,
+            and most of that equipment is used a handful of times a year.
           </p>
         </div>
         <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -232,6 +257,50 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Why reuse */}
+      <section id="reuse" className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:pb-20">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-moss">
+              Why reuse wins
+            </p>
+            <h2 className="mt-3 font-display text-[28px] font-bold leading-tight text-forest sm:text-[36px]">
+              The greenest equipment is the equipment that already exists.
+            </h2>
+          </div>
+          <p className="max-w-sm text-[13px] leading-relaxed text-muted-foreground">
+            Sharing keeps useful things in use and out of landfill — no new purchase
+            required.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {REUSE_POINTS.map((point) => (
+            <div key={point.title} className="surface p-6">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-lime/40 text-forest">
+                <point.icon className="h-[18px] w-[18px]" />
+              </span>
+              <h3 className="mt-4 font-display text-base font-semibold text-forest">
+                {point.title}
+              </h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
+                {point.body}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-6 max-w-3xl rounded-xl bg-cream/60 px-4 py-3 text-[11.5px] leading-relaxed text-muted-foreground">
+          <span className="font-semibold text-forest/80">
+            How sharing reduces emissions and waste:{" "}
+          </span>
+          an item borrowed is an item that did not have to be manufactured, packaged and
+          shipped, and one less item that may be discarded after a single event. Oeuvre
+          does not put a number on that saving — doing so honestly would need
+          product-level data the platform does not have.
+        </p>
       </section>
 
       {/* How it works */}
@@ -348,8 +417,8 @@ export default function LandingPage() {
               </h2>
             </div>
             <p className="max-w-sm text-[12.5px] leading-relaxed text-muted-foreground">
-              These figures come straight from completed Oeuvre bookings. No
-              environmental claims are invented.
+              These figures come straight from completed Oeuvre bookings. Reuse is the
+              point — so we report what was shared, not an invented carbon saving.
             </p>
           </div>
 
@@ -409,9 +478,9 @@ export default function LandingPage() {
               <Logo compact />
             </span>
             <span className="font-display font-semibold text-forest">Oeuvre</span>
-            <span>· Community equipment sharing</span>
+            <span>· Reuse over buying</span>
           </div>
-          <p>Built for schools, societies, NGOs and clubs.</p>
+          <p>Community equipment sharing · reuse over buying.</p>
         </div>
       </footer>
     </div>
